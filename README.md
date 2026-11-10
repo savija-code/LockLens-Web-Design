@@ -61,7 +61,7 @@ This is a source-code repository: `dist/` is generated locally and excluded from
 
 ## Attribution
 
-Custom interface and logic created as an initial design/implementation foundation. No paid visual assets, fonts, bundled TTS models, API keys or third-party CDNs are used.
+LockLens uses a custom TypeScript interface for local password generation and analysis. No paid visual assets, remote fonts, API keys or third-party CDNs are used.
 
 Designed & Developed by Savija Rumeth. Third-party components and datasets retain their respective copyrights and licenses; see [third-party notices](THIRD_PARTY_NOTICES.txt), including attribution for the English dictionary's OpenSubtitles-derived data. The build also retains these notices in `dist/THIRD_PARTY_NOTICES.txt`.
 

@@ -1,8 +1,8 @@
 # Public source repository manifest
 
-Snapshot: 2026-11-10. This source-only release contains **36 files** under the project ignore rules. The list below was checked against the actual workspace inventory.
+The public GitHub repository uses a source-only layout. The **36 tracked files** below include the application, tests, configuration, licensing and technical documentation.
 
-The workspace has no Git repository metadata, index or staged files. This is a prospective public manifest, not a statement that files have been staged or a Git-index audit has passed. No Git initialization, commit, push, repository creation or deployment was performed.
+This manifest documents the public source set and its boundary with local-only material. Git's tracked file list remains the source of truth as the project evolves.
 
 ## Public files
 
@@ -52,10 +52,17 @@ tsconfig.json
 - `.test-artifacts/`: compiler output, screenshots, test helpers and all local checkpoints/backups.
 - `/internal/`: private walkthroughs, development history and review notes.
 - `/docs/codex/` and `/AGENTS.md`: local implementation instructions.
-- Environment secrets, local logs, temporary/backup files, compiler caches, coverage and OS metadata matched by `.gitignore`. The existing `.env.example` exception is reserved for nonsecret templates; no such file is present in this snapshot.
+- Environment secrets, local logs, temporary/backup files, compiler caches, coverage and OS metadata matched by `.gitignore`. The `.env.example` exception is reserved for nonsecret templates.
 
-Excluded files remain on the computer. Source, public assets, tests, configuration, package metadata and technical security explanations are retained. `LICENSE` contains the standard MIT License, copyright (c) 2026 Savija Rumeth. `THIRD_PARTY_NOTICES.txt` preserves dependency and dataset ownership and terms separately.
+Generated and private development files stay outside the tracked source set. `LICENSE` contains the standard MIT License, copyright (c) 2026 Savija Rumeth. `THIRD_PARTY_NOTICES.txt` preserves dependency and dataset ownership and terms separately.
 
-## Tracking and publication boundary
+## Maintaining the manifest
 
-No tracked-ignored-file determination or repository Git diff is possible until an actual worktree exists. This inventory applies the current project ignore patterns; future Git configuration or additional ignore rules may affect staging. After Git initialization is explicitly authorized, inspect the actual tracked, ignored, untracked and staged lists using the [release tracking checks](RELEASE.md#tracking-checks-after-git-is-explicitly-authorized). If an ignored file is already tracked, the documented `git rm --cached` procedure keeps its local copy. No untracking command has been run. Publishing requires separate explicit approval.
+Check the actual tracked files and any tracked paths that match ignore rules:
+
+```bash
+git ls-files
+git ls-files --cached --ignored --exclude-standard
+```
+
+Update this list when public files are added or removed. Ignore rules do not untrack existing files, so review the tracked list and staged diff before publishing updates. Keep generated builds and private development material excluded.

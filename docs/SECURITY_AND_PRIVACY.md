@@ -22,7 +22,7 @@
 9. Add a Content Security Policy and review XSS/accessibility risks before public launch; current build is a design foundation, not a security audit.
 10. If a future external breach API is considered, it needs an opt-in privacy design and a documented network-data threat model first.
 
-## Security-focused review checklist for Codex
+## Security Review Checklist
 
 - Verify group coverage and allowable character pool across 1000+ trials.
 - Verify randomized order and rejection sampling; be mindful that deterministic repeatable unit tests should mock a crypto provider only in test context.
