@@ -96,7 +96,7 @@ export function generatePasswords(options: PasswordOptions): string[] {
   if (!pool.length || groups.some(group => !group.length)) throw new Error('No available characters.');
 
   return Array.from({ length: options.count }, () => {
-    // Guarantee each enabled group is represented before the unbiased shuffle.
+
     const result = groups.map(pick);
     while (result.length < options.length) result.push(pick(pool));
     for (let i = result.length - 1; i > 0; i--) {
@@ -125,7 +125,7 @@ export function generationProvenance(batch: GeneratedBatch, index = 0): {
   const categoryCount = sizes.length;
   const q = Math.floor(length / categoryCount);
   const r = length % categoryCount;
-  // The forced category picks make outputs non-uniform. See docs/ANALYSIS.md for P(w).
+
   const logDenominator = sizes.reduce((total, size, i) => total + Math.log2(size) + Math.log2(length - i), 0)
     + (length - categoryCount) * Math.log2(alphabetSize);
   const logMaxCountProduct = (categoryCount - r) * Math.log2(q) + r * Math.log2(q + 1);
