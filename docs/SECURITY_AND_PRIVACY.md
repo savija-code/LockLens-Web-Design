@@ -8,6 +8,8 @@
 - Passwords are held in ephemeral JavaScript memory for UI display; not written to localStorage, cookies, IndexedDB or a network endpoint.
 - `src/core/strength.ts` uses locally bundled zxcvbn-ts with common/English dictionaries and keyboard graphs for both views. It is an estimate, not a safety guarantee or breach checker.
 - Immutable generated batches retain trusted in-runtime provenance and a conservative process probability bound. Entered passwords never inherit this provenance. Length guidance is independent of the estimate; see [analysis methods and limitations](ANALYSIS.md).
+- Creator profiles use confirmed HTTPS URLs, new-tab isolation and a no-referrer policy. No social scripts or embeds are loaded; unconfigured profiles are not rendered.
+- The production package is explicitly inventoried and minified without source maps. Same-origin CSP and other static response headers are prepared for local preview, Cloudflare Pages and Vercel; deployed response verification is still required. See [release preparation](RELEASE.md).
 
 ## Developer obligations
 

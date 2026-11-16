@@ -1,6 +1,7 @@
 import { icon } from './icons.js';
 import { compositionSection } from './composition.js';
 import { MAX_ANALYSIS_LENGTH } from '../core/strength.js';
+import { renderSiteInformation } from './branding.js';
 
 function checkbox(id: string, title: string, sub: string, checked: boolean): string {
   return (
@@ -380,24 +381,7 @@ export function renderAppShell(): string {
               `</article>` +
             `</div>` +
           `</section>` +
-          `\n          <section id="privacy" class="privacy-disclosure" tabindex="-1" aria-labelledby="privacy-title">` +
-            `<h2 id="privacy-title">Privacy policy</h2>` +
-            `<p>Generation and analysis run in this browser. Passwords stay in page memory; this app does not log them, save them to browser storage, or send them to a server. Copying places a password on your system clipboard, where it may remain after you leave.</p>` +
-            `<p>Loading this site requests its HTML, scripts (including the estimator and dictionaries), styles and icon from the host. The host may record ordinary access logs such as IP addresses. Generating or analyzing makes no additional requests. There are no analytics, trackers, remote fonts, or external password checks.</p>` +
-          `</section>` +
-          `\n          <footer class="page-footer">` +
-            `<div>` +
-              `<strong>` +
-                `locklens` +
-                `<span class="brand-period">.</span>` +
-              `</strong>` +
-              `<span>Made for stronger habits, with privacy in mind.</span>` +
-            `</div>` +
-            `<div class="footer-credit">` +
-              `<a href="#privacy">Privacy policy</a>` +
-              `<span>Designed &amp; Developed by Savija Rumeth</span>` +
-            `</div>` +
-          `</footer>` +
+          `${renderSiteInformation()}` +
         `\n        </main>` +
       `\n      </div>` +
     `\n    </div>` +

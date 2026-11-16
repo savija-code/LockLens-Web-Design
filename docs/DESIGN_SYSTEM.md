@@ -52,6 +52,8 @@ Font stack: Inter (if installed), system UI, Segoe UI fallback. No network font 
 - For input beyond the local analysis limit, show “Not assessed” with an empty meter and no numeric score. Preserve the full input and its actual length so a truncated prefix cannot appear to describe the whole password.
 - Mobile drawer overlays content with a backdrop, Escape dismissal and managed focus. Closed navigation is inert on mobile; tablet icons retain accessible names.
 - Privacy disclosure is a compact section separate from footer branding and the developer credit.
+- Place “Connect with the creator” in the footer, with small original SVG icons, readable labels and mint hover/focus accents. Render only confirmed HTTPS profile URLs; unconfigured services have no public placeholder links. Wrap gracefully on narrow screens and at 200% zoom.
+- Keep About, Privacy and Legal below the security workspace. Use brief text and collapsed disclosures for secondary detail, with keyboard-visible focus. Copyright wording must acknowledge the existing MIT and third-party permissions.
 - Respect `prefers-reduced-motion` and visible focus states.
 
 ## Avoid

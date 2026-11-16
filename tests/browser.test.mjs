@@ -317,3 +317,84 @@ test('copy does not reveal passwords; unavailable crypto reports a readable erro
     assert.equal(await page.locator('#score-composition-length').textContent(), '0');
   }, page => page.addInitScript(() => Object.defineProperty(globalThis, 'crypto', { value: undefined })));
 });
+
+test('creator profiles publish only confirmed links with safe attributes and keyboard focus', async () => {
+  await withPage(1440, async (page, requests) => {
+    const profile = page.locator('#creator-links a');
+    assert.equal(await profile.count(), 1);
+    assert.equal(await profile.getAttribute('href'), 'https://github.com/savija-code');
+    assert.equal(await profile.getAttribute('target'), '_blank');
+    assert.match(await profile.getAttribute('rel'), /noopener/);
+    assert.match(await profile.getAttribute('rel'), /noreferrer/);
+    assert.equal(await profile.getAttribute('referrerpolicy'), 'no-referrer');
+    assert.match(await profile.getAttribute('aria-label'), /opens in a new tab/);
+    assert.equal(await profile.locator('svg[aria-hidden="true"]').count(), 1);
+    assert.equal(await page.locator('a[href*="linkedin.com"], a[href*="facebook.com"]').count(), 0);
+    await profile.focus();
+    assert.equal(await profile.evaluate(node => node.matches(':focus-visible')), true);
+    assert.equal(await profile.evaluate(node => getComputedStyle(node).outlineStyle), 'solid');
+    await page.keyboard.press('Tab');
+    assert.equal(await page.evaluate(() => document.activeElement.getAttribute('href')), '#about');
+    await page.locator('.footer-links a[href="#legal"]').click();
+    await page.waitForFunction(() => document.getElementById('legal').open);
+    assert.match(await page.locator('#legal').textContent(), /permissions already granted/);
+    assert.match(await page.locator('#legal').textContent(), /can still be inspected/);
+    assert.match(await page.locator('.copyright-terms').textContent(), /MIT grants/);
+    const response = await page.request.get(`${origin}/THIRD_PARTY_NOTICES.txt`);
+    assert.equal(response.status(), 200);
+    assert.match(await response.text(), /OpenSubtitles/);
+    assert.ok(requests.every(request => request.url.startsWith(`${origin}/`)));
+  });
+});
+
+test('branding remains readable and usable across widths, 200% equivalent reflow and reduced motion', async () => {
+  for (const width of [320, 390, 768, 1024, 1440]) await withPage(width, async page => {
+    const profile = page.locator('#creator-links a');
+    await profile.scrollIntoViewIfNeeded();
+    assert.equal(await profile.isVisible(), true);
+    assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
+    assert.ok(await profile.evaluate(node => parseFloat(getComputedStyle(node).fontSize) >= 12));
+    const contrast = await profile.evaluate(node => {
+      const rgb = value => value.match(/[\d.]+/g).slice(0, 3).map(Number).map(v => {
+        const s = v / 255; return s <= 0.04045 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
+      });
+      const luminance = c => .2126 * c[0] + .7152 * c[1] + .0722 * c[2];
+      const a = luminance(rgb(getComputedStyle(node).color));
+      const b = luminance(rgb(getComputedStyle(document.body).backgroundColor));
+      return (Math.max(a, b) + .05) / (Math.min(a, b) + .05);
+    });
+    assert.ok(contrast >= 4.5);
+    assert.ok(await profile.evaluate(node => parseFloat(getComputedStyle(node).transitionDuration) < .001));
+    if (width === 1440 || width === 768) {
+      // Browser page zoom halves the CSS viewport; CSS zoom alone does not
+      // update media queries and is not an equivalent responsive-layout test.
+      await page.setViewportSize({ width: width / 2, height: 475 });
+      await profile.scrollIntoViewIfNeeded();
+      assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
+      await profile.focus();
+      assert.equal(await page.evaluate(() => document.activeElement.closest('#creator-links') !== null), true);
+      await page.locator('.footer-links a[href="#legal"]').click();
+      await page.waitForFunction(() => document.getElementById('legal').open);
+    }
+  });
+});
+
+test('production CSP is enforced without blocking local generation, analysis or copy', async () => {
+  await withPage(1440, async page => {
+    const response = await page.request.get(origin);
+    assert.match(response.headers()['content-security-policy'], /worker-src 'self'/);
+    assert.equal(response.headers()['referrer-policy'], 'no-referrer');
+    const violations = [];
+    await page.exposeFunction('recordCspViolation', directive => violations.push(directive));
+    await page.evaluate(() => document.addEventListener('securitypolicyviolation', event => window.recordCspViolation(event.effectiveDirective)));
+    await page.locator('#generate-btn').click();
+    await page.locator('#copy-btn').click();
+    assert.match(await page.locator('#toast').textContent(), /Password copied/);
+    await page.locator('#analyzer-tab').click();
+    await page.locator('#analyzer-input').fill('abababababababababab');
+    assert.ok(Number(await page.locator('#analyzer-score').textContent()) <= 1);
+    assert.equal(violations.length, 0);
+  }, page => page.addInitScript(() => {
+    Object.defineProperty(navigator, 'clipboard', { value: { writeText: async () => {} } });
+  }));
+});

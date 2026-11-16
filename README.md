@@ -35,9 +35,15 @@ npm test
 
 `test` runs the production build, core regressions and browser regressions. `test:unit` and `test:browser` can run separately after a build. TypeScript emits the modules used by tests to the ignored `.test-artifacts/compiled/` directory; only the bundled app and static assets are delivered in `dist/`.
 
+Packaging regressions also check the production inventory, retained notices, social URL validation and security-header configuration. Browser checks cover the footer's keyboard focus, contrast, responsive layout and 200%-equivalent zoom reflow (a halved CSS viewport).
+
 Browser tests use installed Chrome or Edge on Windows; on other systems set `LOCKLENS_BROWSER_PATH` to an installed Chromium executable. The test server binds to `127.0.0.1:5173`; stop any other preview on that port first. Tests do not download a browser. Local screenshots and test output remain under `.test-artifacts/`.
 
-Read [analysis methods and limitations](docs/ANALYSIS.md) for composition definitions, NIST references and the generation probability derivation. The app bundle including the estimator and dictionaries is approximately 1,657 KiB (829 KiB gzip).
+Read [analysis methods and limitations](docs/ANALYSIS.md) for composition definitions, NIST references and the generation probability derivation. The app bundle including the estimator and dictionaries is approximately 1,661 KiB (831 KiB gzip).
+
+## Creator profiles
+
+Edit `src/config/creator.ts` to configure confirmed public HTTPS profile URLs. GitHub points to `https://github.com/savija-code`. LinkedIn and Facebook are `null` and produce no public links until confirmed. Canonical platform hosts are checked; credentials, tracking queries and fragments are rejected. These definitions are public client configuration, never a place for secrets. Links use a new tab with `noopener`, `noreferrer` and a no-referrer policy; no social scripts or embeds are loaded.
 
 ## What this is not
 
@@ -53,11 +59,14 @@ Read [analysis methods and limitations](docs/ANALYSIS.md) for composition defini
 - [Security and privacy boundaries](docs/SECURITY_AND_PRIVACY.md)
 - [Analysis methods](docs/ANALYSIS.md)
 - [Release review and static hosting](docs/RELEASE.md)
-- [Public source repository manifest](docs/PUBLIC_REPOSITORY_MANIFEST.md)
+- [Ownership and licensing review](docs/OWNERSHIP.md)
+- [Earlier public source inventory](docs/PUBLIC_REPOSITORY_MANIFEST.md)
 
 ## Build artifacts
 
-This is a source-code repository: `dist/` is generated locally and excluded from Git. Rebuild after cloning or changing source, and serve only `dist/`. Relative asset paths support hosting under a repository subpath. The build copies the HTML, styles, favicon and MIT License, bundles the app with its dictionaries, and retains dependency notices. It does not ship development prompts, internal notes, test modules or source maps.
+`dist/` is generated locally and excluded from Git. A private development repository can power the public static website; its repository settings do not hide files delivered to browsers. Serve only `dist/` over HTTPS. Relative asset paths support subpath hosting. JavaScript and all five stylesheets are minified; source maps are disabled. The build preserves the MIT license and dependency notices and emits Cloudflare Pages headers matching `vercel.json`.
+
+`scripts/production-files.mjs` explicitly lists deployable files and reviewed `public/` assets. New or stale unreviewed files cause the build to fail without deleting them. Register any actual required runtime assets there before deployment. Internal notes, tests, screenshots, environment files and source maps cannot silently enter the package. See the [release guide](docs/RELEASE.md) for inventory, CSP and provider setup. No deployment is performed by the build.
 
 ## Attribution
 
@@ -68,3 +77,5 @@ Designed & Developed by Savija Rumeth. Third-party components and datasets retai
 ## License
 
 LockLens source code is released under the [MIT License](LICENSE), copyright (c) 2026 Savija Rumeth. This project license does not replace the licenses or ownership notices of third-party dependencies and datasets.
+
+The footer copyright reservation is expressly subject to these existing grants. Keeping ongoing source development private does not revoke MIT permissions already granted. See the [ownership review](docs/OWNERSHIP.md) before considering separate terms for future original additions.

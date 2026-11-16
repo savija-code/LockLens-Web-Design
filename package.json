@@ -5,11 +5,11 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "build": "tsc -p tsconfig.json && node scripts/copy-assets.mjs && node scripts/bundle.mjs",
+    "build": "tsc -p tsconfig.json && node scripts/copy-assets.mjs && node scripts/bundle.mjs && node scripts/verify-dist.mjs",
     "dev": "npm run build && node scripts/dev-server.mjs",
     "check": "tsc --noEmit -p tsconfig.json",
     "test": "npm run build && npm run test:unit && npm run test:browser",
-    "test:unit": "node --test tests/password.test.mjs tests/strength.test.mjs",
+    "test:unit": "node --test tests/password.test.mjs tests/strength.test.mjs tests/production.test.mjs",
     "test:browser": "node --test tests/browser.test.mjs"
   },
   "devDependencies": {

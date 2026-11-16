@@ -1,6 +1,8 @@
 # Public source repository manifest
 
-The public GitHub repository uses a source-only layout. The **36 tracked files** below include the application, tests, configuration, licensing and technical documentation.
+This is the earlier public source inventory, retained as historical documentation. It is not an instruction to publish current development source or change repository settings. Current private-hosting preparation is documented in [RELEASE.md](RELEASE.md) and [OWNERSHIP.md](OWNERSHIP.md).
+
+The earlier **36-file** source set below includes the application, tests, configuration, licensing and technical documentation.
 
 This manifest documents the public source set and its boundary with local-only material. Git's tracked file list remains the source of truth as the project evolves.
 

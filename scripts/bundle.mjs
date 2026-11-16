@@ -9,6 +9,7 @@ await build({
   platform: 'browser',
   target: 'es2022',
   minify: true,
+  sourcemap: false,
   legalComments: 'eof',
   outfile: 'dist/assets/main.js'
 });

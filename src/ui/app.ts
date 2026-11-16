@@ -5,6 +5,7 @@ import { bindNavigation } from './navigation.js';
 import { lengthGuidance } from '../core/guidance.js';
 import { updateComposition } from './composition.js';
 import { renderAppShell } from './template.js';
+import { mountCreatorConnections } from './branding.js';
 
 const state = {
   options: { ...DEFAULT_OPTIONS },
@@ -227,6 +228,7 @@ function bindControls(): void {
 
 export function mountApp(): void {
   app.innerHTML = renderAppShell();
+  mountCreatorConnections();
   bindControls();
   changeView('generator');
   renderAnalysis('analyzer', '');
