@@ -2,7 +2,7 @@ import { lstatSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 
 export const styleFiles = ['tokens.css', 'base.css', 'layout.css', 'components.css', 'responsive.css'];
-// Review additions explicitly so public/ never becomes a catch-all deployment copy.
+
 export const publicFiles = ['favicon.svg'];
 export const productionFiles = [
   'index.html', 'LICENSE', 'THIRD_PARTY_NOTICES.txt', '_headers', 'assets/main.js',

@@ -2,7 +2,7 @@ import { cpSync, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node
 import { transform } from 'esbuild';
 import { assertFileSet, listFiles, productionFiles, publicFiles, styleFiles } from './production-files.mjs';
 
-// Fail closed on stale or unreviewed assets, preserving them for owner review.
+
 assertFileSet(listFiles('public'), publicFiles);
 if (existsSync('dist')) assertFileSet(listFiles('dist'), productionFiles, false);
 mkdirSync('dist/assets/styles', { recursive: true });
