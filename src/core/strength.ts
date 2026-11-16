@@ -4,10 +4,10 @@ import { dictionary as englishDictionary, translations } from '@zxcvbn-ts/langua
 import { generationProvenance, type GeneratedBatch } from './password.js';
 import { analyzeComposition, type CharacterComposition } from './composition.js';
 
-// zxcvbn measures its input limit in UTF-16 code units, not Unicode code points.
+
 export const MAX_ANALYSIS_LENGTH = 256;
 
-// All dictionaries and keyboard graphs are bundled locally; no network matchers.
+
 const estimator = new ZxcvbnFactory({
   translations,
   graphs: adjacencyGraphs,
@@ -44,7 +44,7 @@ const patternDescriptions: Record<string, string> = {
   regex: 'Familiar numeric patterns'
 };
 
-/** Pattern estimate only: unknown origin is never treated as proof of randomness. */
+
 export function assessPassword(value: string): StrengthResult {
   const composition = analyzeComposition(value);
   const provenance: StrengthResult['provenance'] = { source: 'external', summary: 'Entered password - generation method unknown.' };
@@ -54,7 +54,7 @@ export function assessPassword(value: string): StrengthResult {
     weaknesses: [], suggestions: [], composition, provenance, checks: []
   };
   const result = estimator.check(value);
-  // Return descriptions, never matching tokens or raw estimator results.
+
   const weaknesses = [...new Set(result.sequence.map(match => patternDescriptions[match.pattern]).filter(Boolean))];
   const warning = result.feedback.warning ?? '';
   const suggestions = result.feedback.suggestions.length

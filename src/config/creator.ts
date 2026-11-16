@@ -1,6 +1,6 @@
 export type SocialService = 'github' | 'linkedin' | 'facebook';
 
-// Public profile URLs only. Null entries stay unpublished until confirmed.
+
 export const creatorProfiles: Readonly<Record<SocialService, string | null>> = Object.freeze({
   github: 'https://github.com/savija-code',
   linkedin: null,
